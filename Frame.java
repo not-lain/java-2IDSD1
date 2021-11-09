@@ -1,6 +1,7 @@
 package project;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,20 +25,24 @@ public class Frame implements ActionListener {
 	public Frame() {
 		
 		frame = new JFrame("les lettres et les numeros");
-		msg_intro = new JLabel("chose a game");
-		p_intro = new JPanel(new BorderLayout());
+		p_intro = new JPanel(new FlowLayout());
 		content_intro = new JPanel();
+		
+		
+		content_intro.setLayout(new GridLayout(6,0));
 		numeros.addActionListener(this);
 		lettres.addActionListener(this);
 		exit.addActionListener(this);
-		content_intro.setLayout(new GridLayout(3,0));
+		msg_intro = new JLabel("chose a game");
 		content_intro.add(msg_intro);
 		content_intro.add(numeros);
 		content_intro.add(lettres);
+		content_intro.add(new JLabel(""));
+		content_intro.add(new JLabel(""));
+		content_intro.add(exit);
 		
 		
 		p_intro.add(content_intro,BorderLayout.NORTH);
-		p_intro.add(exit,BorderLayout.SOUTH);
 		
 		frame.add(p_intro);
 		frame.setSize(300,400);
