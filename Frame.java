@@ -42,6 +42,7 @@ public class Frame implements ActionListener {
 
 		frame.add(p_intro);
 		frame.setSize(300, 400);
+		frame.setLocation(500,300);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setVisible(true);
 	}
