@@ -54,8 +54,6 @@ public class Frame implements ActionListener {
 			System.exit(0);
 		}
 		if (e.getSource() == lettres) {
-			frame.getContentPane().removeAll();
-			frame.setVisible(false);
 			frame.dispose();
 			frame = new Lettres();
 			frame.revalidate();
