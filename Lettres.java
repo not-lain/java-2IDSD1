@@ -1,5 +1,7 @@
 package project;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
@@ -11,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class Lettres extends JFrame implements KeyListener{
+public class Lettres extends JFrame implements KeyListener, ActionListener{
 	JTextField  t1 , t2 , t3 ,t4 , t5 ,t6 ,t7;
 	JCheckBox c1 ;
 	JLabel word,msg,l1,l2,l3,l4,l5,l6,l7;
@@ -67,6 +69,7 @@ public class Lettres extends JFrame implements KeyListener{
 		c1 = new JCheckBox("verify");
 		submit = new JButton("submit");
 		exit = new JButton("exit");
+		exit.addActionListener(this);
 		submitzone= new JPanel();
 		submitzone.add(c1);
 		submitzone.add(submit);
@@ -113,5 +116,12 @@ public class Lettres extends JFrame implements KeyListener{
 		Random r = new Random();
 		char c = (char)(r.nextInt(26) + 'a');
 		return c;
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==exit) {
+			System.exit(0);
+		}
 	}
 }
