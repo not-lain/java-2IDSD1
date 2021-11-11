@@ -6,9 +6,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-import javax.swing.AbstractButton;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -17,17 +17,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-
 public class Lettres extends JFrame implements KeyListener, ActionListener {
-	JTextField t1, t2, t3, t4, t5, t6, t7,i;
+	JTextField t1, t2, t3, t4, t5, t6, t7;
 	JCheckBox c1;
-	JLabel word, msg, l1, l2, l3, l4, l5, l6, l7, player1, player2, turn;
+	JLabel word, msg, l1=new JLabel(), l2=new JLabel(), l3=new JLabel(), l4=new JLabel(), l5=new JLabel(), l6=new JLabel(), l7=new JLabel(), player1, player2, turn;
 	JPanel main, gamezone, targetzone, submitzone, head, headzone;
 	JButton submit, exit;
-	int p1 = 0, p2 = 0, t = 1,score;
-	
+	int p1 = 0, p2 = 0, t = 1, score, alphabetValue;
+	List<String> l = new ArrayList<String>();
 
 	Lettres() {
+
+
 		head = new JPanel();
 		headzone = new JPanel();
 		headzone.setLayout(new BoxLayout(headzone, BoxLayout.Y_AXIS));
@@ -64,15 +65,11 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 		gamezone.add(t6);
 		gamezone.add(t7);
 
+		
+
 		msg = new JLabel("your word is:   ");
-		l1 = new JLabel("" + randomWordGenerator());
-		l2 = new JLabel("" + randomWordGenerator());
-		l3 = new JLabel("" + randomWordGenerator());
-		l4 = new JLabel("" + randomWordGenerator());
-		l5 = new JLabel("" + randomWordGenerator());
-		l6 = new JLabel("" + randomWordGenerator());
-		l7 = new JLabel("" + randomWordGenerator());
 		targetzone = new JPanel();
+		setNewWord();
 		targetzone.add(msg);
 		targetzone.add(l1);
 		targetzone.add(l2);
@@ -103,9 +100,18 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 		this.setLocation(500, 300);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		
 
 	}
 
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 		if ((int) e.getKeyChar() == 27) { // exit on escape key
@@ -151,10 +157,10 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 
 	}
 
-	public char randomWordGenerator() {
+	public String randomWordGenerator() {
 		Random r = new Random();
 		char c = (char) (r.nextInt(26) + 'a');
-		return c;
+		return ("" + c);
 	}
 
 	@Override
@@ -165,31 +171,57 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 		}
 		if (e.getSource() == submit) {
 			score = 0;
-			
-			//for loop on all JtextFields
+			alphabetValue = 0 ;
+
+			// for loop on all JtextFields
 			for (Component component : gamezone.getComponents()) {
-	            if (component instanceof JTextField) {
-	            	//System.out.println(((JTextField) component).getText());
-	            	score += ((int) ((JTextField) component).getText().charAt(0)) -97;
-	            	((JTextField) component).setText(""); //clear JtextField after submit
-	            	//System.out.println(score);
-	            	t1.requestFocus(true);
-	            }
-	        }
-			if (t==1) {
-				p1+=score;
+				if (component instanceof JTextField) {
+					// System.out.println(((JTextField) component).getText());
+					try {
+						alphabetValue = ((int) ((JTextField) component).getText().charAt(0)) - 97;
+					} catch (Exception e2) {
+						// TODO: handle exception
+					}
+					
+					if (alphabetValue > 0 && alphabetValue < 26) {
+						score += alphabetValue;
+					}
+					((JTextField) component).setText(""); // clear JtextField after submit
+					// System.out.println(score);
+					t1.requestFocus(true);
+				}
+			}
+			if (t == 1) {
+				p1 += score;
 				player1.setText("player 1: " + p1);
-				
-			}else {
-				p2+=score;
+
+			} else {
+				p2 += score;
 				player2.setText("player 2: " + p2);
 			}
-			
-			//turn
+
+			// turn
 			t = (int) (1.5 + (-(t - 1.5))); // switch between 1 and 2 alternatively
 			turn.setText("turn: " + t);// change player turn
+			
+			setNewWord();
+			
 
 		}
+	}
+	
+	public void setNewWord() {
+		l = new ArrayList<String>();
+		for (int i = 0; i < 7; i++) {
+			l.add(randomWordGenerator());
+		}
+		l1.setText(l.get(0));
+		l2.setText(l.get(1));
+		l3.setText(l.get(2));
+		l4.setText(l.get(3));
+		l5.setText(l.get(4));
+		l6.setText(l.get(5));
+		l7.setText(l.get(6));
 	}
 
 }
