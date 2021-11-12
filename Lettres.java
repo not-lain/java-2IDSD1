@@ -23,7 +23,8 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 	JLabel word, msg, l1=new JLabel(), l2=new JLabel(), l3=new JLabel(), l4=new JLabel(), l5=new JLabel(), l6=new JLabel(), l7=new JLabel(), player1, player2, turn;
 	JPanel main, gamezone, targetzone, submitzone, head, headzone;
 	JButton submit, exit;
-	int p1 = 0, p2 = 0, t = 1, score, alphabetValue,alphabet;
+	int p1 = 0, p2 = 0, t = 1, score, alphabetValue;
+	char alphabet;
 	List<String> l = new ArrayList<String>();
 
 	Lettres() {
@@ -172,31 +173,9 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 		
 		//submit button
 		if (e.getSource() == submit) {
-			score = 0;
-			alphabetValue = 0 ;
 
-			// for loop on all JtextFields
-			for (Component component : gamezone.getComponents()) {
-				if (component instanceof JTextField) {
-					// System.out.println(((JTextField) component).getText());
-					try {
-						//see if the character is an alphabet or of higher ASCII value 
-						//alphabet = ((component.getToolkit().charAt(0));
-						System.out.println("a= "+alphabet);
-						alphabetValue = ((int) ((JTextField) component).getText().charAt(0)) - 97;
-					} catch (Exception e2) {
-						// TODO: handle exception
-					}
-					
-					if (alphabetValue > 0 && alphabetValue < 26) {
-						//if(l.contains(o));
-						score += alphabetValue;
-					}
-					((JTextField) component).setText(""); // clear JtextField after submit
-					// System.out.println(score);
-					t1.requestFocus(true);
-				}
-			}
+			
+			calculateScore();
 			if (t == 1) {
 				p1 += score;
 				player1.setText("player 1: " + p1);
@@ -207,9 +186,9 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 			}
 
 			// turn
+			t1.requestFocus(true);
 			t = (int) (1.5 + (-(t - 1.5))); // switch between 1 and 2 alternatively
 			turn.setText("turn: " + t);// change player turn
-			
 			setNewWord();
 			
 
@@ -230,4 +209,33 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 		l7.setText(l.get(6));
 	}
 
+	public void calculateScore() {
+		score = 0;
+		alphabetValue = 0 ;
+		// for loop on all JtextFields
+					for (Component component : gamezone.getComponents()) {
+						if (component instanceof JTextField) {
+							// System.out.println(((JTextField) component).getText());
+							try {
+								//sometimes the field is empty and getting the character will create an error  
+								alphabet =((JTextField) component).getText().charAt(0);
+								if(l.contains(""+alphabet)) {
+									l.remove(""+alphabet);
+									System.out.println(alphabet+" :exists");
+									alphabetValue = (int)alphabet -97 ;
+									if (alphabetValue > 0 && alphabetValue < 26) {
+										score += alphabetValue;
+									}
+									System.out.println("score "+score);
+								}
+							} catch (Exception e2) {
+								// TODO: handle exception
+							}
+							
+							// clear JtextField for the next player 
+							((JTextField) component).setText(""); 
+							
+						}
+					}
+	}
 }
