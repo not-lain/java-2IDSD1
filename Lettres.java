@@ -23,7 +23,7 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 	JLabel word, msg, l1=new JLabel(), l2=new JLabel(), l3=new JLabel(), l4=new JLabel(), l5=new JLabel(), l6=new JLabel(), l7=new JLabel(), player1, player2, turn;
 	JPanel main, gamezone, targetzone, submitzone, head, headzone;
 	JButton submit, exit;
-	int p1 = 0, p2 = 0, t = 1, score, alphabetValue;
+	int p1 = 0, p2 = 0, t = 1, score, alphabetValue,alphabet;
 	List<String> l = new ArrayList<String>();
 
 	Lettres() {
@@ -165,10 +165,12 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		// exit button
 		if (e.getSource() == exit) {
 			System.exit(0);
 		}
+		
+		//submit button
 		if (e.getSource() == submit) {
 			score = 0;
 			alphabetValue = 0 ;
@@ -178,12 +180,16 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 				if (component instanceof JTextField) {
 					// System.out.println(((JTextField) component).getText());
 					try {
+						//see if the character is an alphabet or of higher ASCII value 
+						//alphabet = ((component.getToolkit().charAt(0));
+						System.out.println("a= "+alphabet);
 						alphabetValue = ((int) ((JTextField) component).getText().charAt(0)) - 97;
 					} catch (Exception e2) {
 						// TODO: handle exception
 					}
 					
 					if (alphabetValue > 0 && alphabetValue < 26) {
+						//if(l.contains(o));
 						score += alphabetValue;
 					}
 					((JTextField) component).setText(""); // clear JtextField after submit
