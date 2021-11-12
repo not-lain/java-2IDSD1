@@ -1,6 +1,8 @@
 package project;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -20,26 +22,35 @@ import javax.swing.JTextField;
 public class Lettres extends JFrame implements KeyListener, ActionListener {
 	JTextField t1, t2, t3, t4, t5, t6, t7;
 	JCheckBox c1;
-	JLabel word, msg, l1=new JLabel(), l2=new JLabel(), l3=new JLabel(), l4=new JLabel(), l5=new JLabel(), l6=new JLabel(), l7=new JLabel(), player1, player2, turn;
+	JLabel word, msg, l1 = new JLabel(), l2 = new JLabel(), l3 = new JLabel(), l4 = new JLabel(), l5 = new JLabel(),
+			l6 = new JLabel(), l7 = new JLabel(), player1, player2, turn,roundsleft;
 	JPanel main, gamezone, targetzone, submitzone, head, headzone;
-	JButton submit, exit;
-	int p1 = 0, p2 = 0, t = 1, score, alphabetValue;
+	JButton submit, exit,menu;
+	int p1 = 0, p2 = 0, t = 1, score, alphabetValue,rl=10;
 	char alphabet;
 	List<String> l = new ArrayList<String>();
 
 	Lettres() {
 
-
-		head = new JPanel();
+		head = new JPanel(new BorderLayout());
 		headzone = new JPanel();
-		headzone.setLayout(new BoxLayout(headzone, BoxLayout.Y_AXIS));
+		headzone.setLayout(new GridLayout(4,3));
 		player1 = new JLabel("player 1: " + p1);
 		player2 = new JLabel("player 2: " + p2);
+		roundsleft = new JLabel("rounds left: "+rl);
 		turn = new JLabel("turn: " + t);
+		headzone.add(new JLabel());
 		headzone.add(player1);
+		headzone.add(new JLabel());
+		headzone.add(new JLabel());
 		headzone.add(player2);
+		headzone.add(new JLabel());
+		headzone.add(new JLabel());
 		headzone.add(turn);
-		head.add(headzone);
+		headzone.add(new JLabel());
+		headzone.add(new JLabel());
+		headzone.add(roundsleft);
+		head.add(headzone, BorderLayout.CENTER);
 
 		t1 = new JTextField(1);
 		t1.addKeyListener(this);
@@ -66,8 +77,6 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 		gamezone.add(t6);
 		gamezone.add(t7);
 
-		
-
 		msg = new JLabel("your word is:   ");
 		targetzone = new JPanel();
 		setNewWord();
@@ -81,13 +90,17 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 		targetzone.add(l7);
 
 		c1 = new JCheckBox("verify");
+		c1.addActionListener(this);
 		submit = new JButton("submit");
 		submit.addActionListener(this);
+		menu = new JButton("menu");
+		menu.addActionListener(this);
 		exit = new JButton("exit");
 		exit.addActionListener(this);
 		submitzone = new JPanel();
 		submitzone.add(c1);
 		submitzone.add(submit);
+		submitzone.add(menu);
 		submitzone.add(exit);
 
 		main = new JPanel();
@@ -98,21 +111,12 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 		this.setTitle("les lettres");
 		this.add(main);
 		this.setSize(300, 400);
-		this.setLocation(500, 300);
+		this.setLocation(400, 300);
 		this.setVisible(true);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
-		
+		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
 	}
 
-	
-	
-	
-	
-	
-	
-	
 	@Override
 	public void keyTyped(KeyEvent e) {
 		if ((int) e.getKeyChar() == 27) { // exit on escape key
@@ -170,31 +174,51 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 		if (e.getSource() == exit) {
 			System.exit(0);
 		}
-		
-		//submit button
-		if (e.getSource() == submit) {
+		//JcheckBox returns focus on PlayField 
+		else if(e.getSource()==c1) {
+			t1.requestFocus(true);
+		}
+		//menu
+		else if(e.getSource()==menu) {
+			dispose();
+			Frame frame = new Frame();
+		}
 
+		// submit button
+		else if (e.getSource() == submit) {
+			if(rl==0) {
+				dispose();
+				Score s =  new Score(p1, p2);
+			}
 			
-			calculateScore();
-			if (t == 1) {
-				p1 += score;
-				player1.setText("player 1: " + p1);
+			
+			if (c1.isSelected()) {
+				calculateScore();
+				if (t == 1) {
+					p1 += score;
+					player1.setText("player 1: " + p1);
 
-			} else {
-				p2 += score;
-				player2.setText("player 2: " + p2);
+				} else {
+					p2 += score;
+					player2.setText("player 2: " + p2);
+					
+				}
+				c1.setSelected(false);
+			}
+			
+			if (t==2) {
+				rl-=1;
+				roundsleft.setText("rounds left: "+rl);
 			}
 
+
 			// turn
-			t1.requestFocus(true);
 			t = (int) (1.5 + (-(t - 1.5))); // switch between 1 and 2 alternatively
 			turn.setText("turn: " + t);// change player turn
 			setNewWord();
-			
-
 		}
 	}
-	
+
 	public void setNewWord() {
 		l = new ArrayList<String>();
 		for (int i = 0; i < 7; i++) {
@@ -207,35 +231,43 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 		l5.setText(l.get(4));
 		l6.setText(l.get(5));
 		l7.setText(l.get(6));
+		t1.requestFocus(true);
+		
+		for (Component component : gamezone.getComponents()) {
+			// if we have a JtextField
+			if (component instanceof JTextField) {
+				// clear JtextField for the next player
+				((JTextField) component).setText("");
+				}
+			}
 	}
 
 	public void calculateScore() {
 		score = 0;
-		alphabetValue = 0 ;
+		alphabetValue = 0;
 		// for loop on all JtextFields
-					for (Component component : gamezone.getComponents()) {
-						if (component instanceof JTextField) {
-							// System.out.println(((JTextField) component).getText());
-							try {
-								//sometimes the field is empty and getting the character will create an error  
-								alphabet =((JTextField) component).getText().charAt(0);
-								if(l.contains(""+alphabet)) {
-									l.remove(""+alphabet);
-									System.out.println(alphabet+" :exists");
-									alphabetValue = (int)alphabet -97 ;
-									if (alphabetValue > 0 && alphabetValue < 26) {
-										score += alphabetValue;
-									}
-									System.out.println("score "+score);
-								}
-							} catch (Exception e2) {
-								// TODO: handle exception
-							}
-							
-							// clear JtextField for the next player 
-							((JTextField) component).setText(""); 
-							
+		for (Component component : gamezone.getComponents()) {
+			// if we have a JtextField
+			if (component instanceof JTextField) {
+				try {
+					// sometimes the field is empty and getting the character will create an error
+					alphabet = ((JTextField) component).getText().charAt(0);
+					// if the alphabet written exists in the list
+					if (l.contains("" + alphabet)) {
+						l.remove("" + alphabet);
+						alphabetValue = (int) alphabet - 96;
+						if (alphabetValue > 0 && alphabetValue < 27) {
+							score += alphabetValue;
 						}
 					}
+				} catch (Exception e2) {
+					// TODO: handle exception
+				}
+
+				
+
+			}
+		}
+		
 	}
 }

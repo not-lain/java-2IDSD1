@@ -11,18 +11,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class Frame implements ActionListener {
+public class Frame extends JFrame implements ActionListener {
 
 	JButton numeros = new JButton("les numeros");
 	JButton lettres = new JButton("les lettres");
 	JButton exit = new JButton("exit");
 	JLabel msg_intro;
 	JPanel p_intro, content_intro;
-	JFrame frame;
+	
 
 	public Frame() {
 
-		frame = new JFrame("les lettres et les numeros");
+		this.setTitle("les lettres et les numeros");
 		p_intro = new JPanel(new FlowLayout());
 		content_intro = new JPanel();
 
@@ -40,11 +40,11 @@ public class Frame implements ActionListener {
 
 		p_intro.add(content_intro, BorderLayout.NORTH);
 
-		frame.add(p_intro);
-		frame.setSize(300, 400);
-		frame.setLocation(500,300);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);
+		this.add(p_intro);
+		this.setSize(300, 400);
+		this.setLocation(500,300);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
 	}
 
 	@Override
@@ -54,10 +54,8 @@ public class Frame implements ActionListener {
 			System.exit(0);
 		}
 		if (e.getSource() == lettres) {
-			frame.dispose();
-			frame = new Lettres();
-			frame.revalidate();
-			frame.repaint();
+			dispose();
+			Lettres l = new Lettres();
 		}
 		
 		
@@ -67,11 +65,11 @@ public class Frame implements ActionListener {
 		
 		
 		if (e.getSource() == numeros) {
-			frame.getContentPane().removeAll();
-			frame.setTitle("numeros");
-			frame.getContentPane().add(new JPanel());
-			frame.revalidate();
-			frame.repaint();
+			this.getContentPane().removeAll();
+			this.setTitle("numeros");
+			this.getContentPane().add(new JPanel());
+			this.revalidate();
+			this.repaint();
 		}
 
 	}
