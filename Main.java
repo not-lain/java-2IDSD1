@@ -1,6 +1,5 @@
 package project;
 
-import javax.swing.JFrame;
 
 public class Main {
 	public static Frame frame ;

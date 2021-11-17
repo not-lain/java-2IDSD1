@@ -242,7 +242,7 @@ public class Lettres extends JFrame implements KeyListener, ActionListener {
 			}
 	}
 
-	public void calculateScore() {
+	private void calculateScore() {
 		score = 0;
 		alphabetValue = 0;
 		// for loop on all JtextFields

@@ -65,11 +65,8 @@ public class Frame extends JFrame implements ActionListener {
 		
 		
 		if (e.getSource() == numeros) {
-			this.getContentPane().removeAll();
-			this.setTitle("numeros");
-			this.getContentPane().add(new JPanel());
-			this.revalidate();
-			this.repaint();
+			dispose();
+			Chiffres c = new Chiffres();
 		}
 
 	}
