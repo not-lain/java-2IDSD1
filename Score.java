@@ -6,10 +6,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class Score extends JFrame implements ActionListener{
 	JLabel msg ;
 	JButton menu ;
+	JPanel main ;
 	public Score(int p1,int p2){
 		if (p1>p2) {
 			msg = new JLabel("player 1 has won");
@@ -20,8 +22,10 @@ public class Score extends JFrame implements ActionListener{
 		
 		menu = new JButton("menu");
 		menu.addActionListener(this);
-		this.add(msg);
-		this.add(menu);
+		main = new JPanel();
+		main.add(msg);
+		main.add(menu);
+		this.add(main);
 		this.setTitle("Congrats");
 		this.pack();
 		this.setVisible(true);
