@@ -1,5 +1,6 @@
 package project;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -7,14 +8,20 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.plaf.ListUI;
 
 public class Chiffres extends JFrame implements ActionListener {
-	JPanel main, submitzone, tryZone, user;
+	JPanel main, submitzone, tryZone, user, container;
 	JButton submit, menu, exit, b1, b2, b3, b4, b5, b6, b7, plus, minus, divide, times;
-	JLabel msg, equation;
+	JLabel msg, equation, number;
 	List<Integer> l = new ArrayList<Integer>();
 	List<Integer> input = new ArrayList<Integer>();
+	int a, b, eq, target,score;
 
 	Chiffres() {
 		tryZone = new JPanel(new GridLayout(7, 2));
@@ -41,7 +48,7 @@ public class Chiffres extends JFrame implements ActionListener {
 		minus.addActionListener(this);
 		times.addActionListener(this);
 		divide.addActionListener(this);
-		newRound();
+
 		equation = new JLabel("");
 		tryZone.add(b1);
 		tryZone.add(new JLabel());
@@ -57,10 +64,11 @@ public class Chiffres extends JFrame implements ActionListener {
 		tryZone.add(new JLabel());
 		tryZone.add(b7);
 
-		user = new JPanel();
-		user.setPreferredSize(new Dimension(200, 20));
-		user.add(equation);
-
+		user = new JPanel(new BorderLayout());
+		number = new JLabel();
+		user.add(number, BorderLayout.NORTH);
+		user.add(equation, BorderLayout.SOUTH);
+		newRound();
 		submitzone = new JPanel();
 		submit = new JButton("submit");
 		menu = new JButton("menu");
@@ -73,10 +81,13 @@ public class Chiffres extends JFrame implements ActionListener {
 		submitzone.add(exit);
 
 		main = new JPanel();
+		main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
 		main.add(tryZone);
 		main.add(user);
 		main.add(submitzone);
-		this.add(main);
+		container = new JPanel();
+		container.add(main);
+		this.add(container);
 		this.setTitle("les numeros");
 		this.setSize(300, 600);
 		this.setLocation(400, 200);
@@ -93,7 +104,7 @@ public class Chiffres extends JFrame implements ActionListener {
 			dispose();
 			Frame f = new Frame();
 		} else if (e.getSource() == submit) {
-			// ---calculate score
+			CalculateScore();
 		}
 		// numbers are scored under 999
 		// signs are scored above 1000
@@ -114,8 +125,7 @@ public class Chiffres extends JFrame implements ActionListener {
 				} catch (Exception e1) {
 					// TODO: handle exception
 				}
-				
-				
+
 			}
 
 		} else if (e.getSource() == b2) {
@@ -135,12 +145,9 @@ public class Chiffres extends JFrame implements ActionListener {
 				} catch (Exception e1) {
 					// TODO: handle exception
 				}
-				
-				
+
 			}
-			
-				
-			
+
 		} else if (e.getSource() == b3) {
 			if (input.size() == 0) {
 				input.add(l.get(2));
@@ -158,8 +165,7 @@ public class Chiffres extends JFrame implements ActionListener {
 				} catch (Exception e1) {
 					// TODO: handle exception
 				}
-				
-				
+
 			}
 		} else if (e.getSource() == b4) {
 			if (input.size() == 0) {
@@ -178,16 +184,9 @@ public class Chiffres extends JFrame implements ActionListener {
 				} catch (Exception e1) {
 					// TODO: handle exception
 				}
-				
-				
+
 			}
-			
-			
-			
-			
-			
-			
-			
+
 		} else if (e.getSource() == b5) {
 			if (input.size() == 0) {
 				input.add(l.get(4));
@@ -205,12 +204,9 @@ public class Chiffres extends JFrame implements ActionListener {
 				} catch (Exception e1) {
 					// TODO: handle exception
 				}
-				
-				
+
 			}
-			
-			
-			
+
 		} else if (e.getSource() == b6) {
 			if (input.size() == 0) {
 				input.add(l.get(5));
@@ -228,12 +224,9 @@ public class Chiffres extends JFrame implements ActionListener {
 				} catch (Exception e1) {
 					// TODO: handle exception
 				}
-				
-				
+
 			}
-			
-			
-			
+
 		} else if (e.getSource() == b7) {
 			if (input.size() == 0) {
 				input.add(l.get(6));
@@ -251,49 +244,47 @@ public class Chiffres extends JFrame implements ActionListener {
 				} catch (Exception e1) {
 					// TODO: handle exception
 				}
-				
-				
+
 			}
-			
-			
+
 		} else if (e.getSource() == plus) {
-			if(input.size()>0) {
-				if(input.get(input.size()-1)<999) {
+			if (input.size() > 0) {
+				if (input.get(input.size() - 1) < 999) {
 					input.add(1000);
 					equation.setText(equation.getText() + " + ");
 				}
 			}
-			
+
 		} else if (e.getSource() == minus) {
-			if(input.size()>0) {
-				if(input.get(input.size()-1)<999) {
+			if (input.size() > 0) {
+				if (input.get(input.size() - 1) < 999) {
 					input.add(2000);
 					equation.setText(equation.getText() + " - ");
 				}
 			}
-			
+
 		} else if (e.getSource() == times) {
-			if(input.size()>0) {
-				if(input.get(input.size()-1)<999) {
+			if (input.size() > 0) {
+				if (input.get(input.size() - 1) < 999) {
 					input.add(3000);
 					equation.setText(equation.getText() + " x ");
 				}
 			}
-			
+
 		} else if (e.getSource() == divide) {
-			if(input.size()>0) {
-				if(input.get(input.size()-1)<999) {
+			if (input.size() > 0) {
+				if (input.get(input.size() - 1) < 999) {
 					input.add(4000);
 					equation.setText(equation.getText() + " / ");
 				}
 			}
-			
+
 		}
 	}
 
 	public int randomNumberGenerator() {
 		Random r = new Random();
-		int c = r.nextInt(999);
+		int c = r.nextInt(99);
 		return (c);
 	}
 
@@ -309,6 +300,78 @@ public class Chiffres extends JFrame implements ActionListener {
 		b5.setText("" + l.get(4));
 		b6.setText("" + l.get(5));
 		b7.setText("" + l.get(6));
+		target = randomNumberGenerator();
+		number.setText("your number is =" + target);
+	}
+
+	private void CalculateScore() {
+		if (input.get(input.size() - 1) >= 1000) {
+			input.remove(input.size() - 1);
+			System.out.println(input);
+		}
+		// importance pour multiplication et division
+		boolean test_importance = true;
+		while (test_importance) {
+			test_importance = false;
+			for (int i = 1; i < input.size(); i++) {
+				if (input.get(i) >= 3000) {
+					test_importance = true;
+					a = input.get(i - 1);
+					b = input.get(i + 1);
+					if (input.get(i) == 3000) { // '*'
+						eq = a * b;
+						input.add(i + 2, eq);
+						input.remove(i - 1);
+						input.remove(i - 1);
+						input.remove(i - 1);
+						System.out.println(input);
+					} else { // '/'
+						eq = a / b;
+						input.add(i + 2, eq);
+						input.remove(i - 1);
+						input.remove(i - 1);
+						input.remove(i - 1);
+						System.out.println(input);
+					}
+					break;
+				}
+
+			}
+			// input does not contain '*' or '/' anymore
+			// only '+' and '-' => '1000' and '2000' after i encoded them
+
+			// sum
+			while (input.size() > 1) {
+				if (input.get(1) == 1000) {
+					a = input.get(0);
+					b = input.get(2);
+					eq = a + b;
+					input.add(0, eq);
+					input.remove(1);
+					input.remove(1);
+					input.remove(1);
+					System.out.println(input);
+
+				} else if (input.get(1) == 2000) {
+					a = input.get(0);
+					b = input.get(2);
+					eq = a - b;
+					input.add(0, eq);
+					input.remove(1);
+					input.remove(1);
+					input.remove(1);
+					System.out.println(input);
+
+				}
+
+			}
+
+		}
+		score = 100 - Math.abs(target - input.get(0));
+		if (score < 0 ) {
+			score = 0 ; 
+		}
+		
 	}
 
 }
