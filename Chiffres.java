@@ -17,31 +17,25 @@ import javax.swing.border.Border;
 import javax.swing.plaf.ListUI;
 
 public class Chiffres extends JFrame implements ActionListener {
-	JPanel main, submitzone, tryZone, user, container,turnzone;
+	JPanel main, submitzone, tryZone, user, container, turnzone;
 	JButton submit, menu, exit, b1, b2, b3, b4, b5, b6, b7, plus, minus, divide, times;
-	JLabel msg, equation, number, player,l1,l2,l3;
+	JLabel msg, equation, number, player, l1, l2, l3;
 	List<Integer> l = new ArrayList<Integer>();
 	List<Integer> input = new ArrayList<Integer>();
-	int a, b, eq, target,score,p1 = 0,p2 = 0,turn = 1,turnsLeft=9;
+	int a, b, eq, target, score, p1 = 0, p2 = 0, turn = 1, turnsLeft = 9;
 
 	Chiffres() {
 		turnzone = new JPanel();
 		turnzone.setLayout(new BoxLayout(turnzone, BoxLayout.Y_AXIS));
-		player = new JLabel("turn :"+turn);
-		l1 = new JLabel("p1 :"+p1);
-		l2 = new JLabel("p2 : "+p2);
-		l3 = new JLabel("turns left : "+turnsLeft);
+		player = new JLabel("turn :" + turn);
+		l1 = new JLabel("p1 :" + p1);
+		l2 = new JLabel("p2 : " + p2);
+		l3 = new JLabel("turns left : " + turnsLeft);
 		turnzone.add(player);
 		turnzone.add(l1);
 		turnzone.add(l2);
 		turnzone.add(l3);
-		
-		
-		
-		
-		
-		
-		
+
 		tryZone = new JPanel(new GridLayout(7, 2));
 		tryZone.setPreferredSize(new Dimension(200, 300));
 		b1 = new JButton();
@@ -310,8 +304,6 @@ public class Chiffres extends JFrame implements ActionListener {
 	private void newRound() {
 		l.clear();
 		input.clear();
-		input.add(0);
-		input.add(1000);
 		for (int i = 0; i < 7; i++) {
 			l.add(randomNumberGenerator());
 		}
@@ -320,8 +312,8 @@ public class Chiffres extends JFrame implements ActionListener {
 			if (component instanceof JButton) {
 				// enable JButton for next turn
 				component.setEnabled(true);
-				}
 			}
+		}
 		b1.setText("" + l.get(0));
 		b2.setText("" + l.get(1));
 		b3.setText("" + l.get(2));
@@ -334,96 +326,107 @@ public class Chiffres extends JFrame implements ActionListener {
 	}
 
 	private void CalculateScore() {
-		score = 0;
-		a = 0 ;
-		b = 0 ;
-		if (input.get(input.size() - 1) >= 1000) {
-			input.remove(input.size() - 1);
-			System.out.println(input);
-		}
-		// importance pour multiplication et division
-		boolean test_importance = true;
-		while (test_importance) {
-			test_importance = false;
-			for (int i = 1; i < input.size(); i++) {
-				if (input.get(i) >= 3000) {
-					test_importance = true;
-					a = input.get(i - 1);
-					b = input.get(i + 1);
-					if (input.get(i) == 3000) { // '*'
-						eq = a * b;
-						input.add(i + 2, eq);
-						input.remove(i - 1);
-						input.remove(i - 1);
-						input.remove(i - 1);
-						System.out.println(input);
-					} else { // '/'
-						eq = a / b;
-						input.add(i + 2, eq);
-						input.remove(i - 1);
-						input.remove(i - 1);
-						input.remove(i - 1);
-						System.out.println(input);
+
+		a = 0;
+		b = 0;
+		if (input.size() > 0) {
+			if (input.get(input.size() - 1) >= 1000) {
+				input.remove(input.size() - 1);
+
+			}
+			// importance pour multiplication et division
+			boolean test_importance = true;
+			while (test_importance) {
+				test_importance = false;
+				for (int i = 1; i < input.size(); i++) {
+					if (input.get(i) >= 3000) {
+						test_importance = true;
+						a = input.get(i - 1);
+						b = input.get(i + 1);
+						if (input.get(i) == 3000) { // '*'
+							eq = a * b;
+							input.add(i + 2, eq);
+							input.remove(i - 1);
+							input.remove(i - 1);
+							input.remove(i - 1);
+
+						} else { // '/'
+							eq = a / b;
+							input.add(i + 2, eq);
+							input.remove(i - 1);
+							input.remove(i - 1);
+							input.remove(i - 1);
+						}
+						break;
 					}
-					break;
+
 				}
+				// input does not contain '*' or '/' anymore
+				// only '+' and '-' => '1000' and '2000' after i encoded them
 
-			}
-			// input does not contain '*' or '/' anymore
-			// only '+' and '-' => '1000' and '2000' after i encoded them
+				// sum
+				while (input.size() > 1) {
+					if (input.get(1) == 1000) {
+						a = input.get(0);
+						b = input.get(2);
+						eq = a + b;
+						input.add(0, eq);
+						input.remove(1);
+						input.remove(1);
+						input.remove(1);
 
-			// sum
-			while (input.size() > 1) {
-				if (input.get(1) == 1000) {
-					a = input.get(0);
-					b = input.get(2);
-					eq = a + b;
-					input.add(0, eq);
-					input.remove(1);
-					input.remove(1);
-					input.remove(1);
-					System.out.println(input);
+					} else if (input.get(1) == 2000) {
+						a = input.get(0);
+						b = input.get(2);
+						eq = a - b;
+						input.add(0, eq);
+						input.remove(1);
+						input.remove(1);
+						input.remove(1);
 
-				} else if (input.get(1) == 2000) {
-					a = input.get(0);
-					b = input.get(2);
-					eq = a - b;
-					input.add(0, eq);
-					input.remove(1);
-					input.remove(1);
-					input.remove(1);
-					System.out.println(input);
+					}
 
 				}
 
 			}
 
 		}
-		score = (int) (100 - Math.abs(target - input.get(0)));
-		if (score < 0 ) {
-			score = 0 ; 
+		score = 0;
+		if (input.size() == 0) {
+			score = 0;
+		} else {
+			score = (int) (100 - Math.abs(target - input.get(0)));
+			if (score < 0) {
+				score = 0;
+			}
+
 		}
+
+		System.out.println("score = " + score);
+		System.out.println("p1 before: " + p1);
 		if (turn == 1) {
-			p1+=score ; 
-			turn = 2 ;
-			player.setText("turn :"+turn);
-			l1.setText("p1 :"+p1);
+
+			p1 += score;
+			System.out.println("p1 after " + p1);
+			turn = 2;
+			player.setText("turn :" + turn);
+			l1.setText("p1 :" + p1);
 			equation.setText("");
 			newRound();
-		}else {
-			p2+=score;
-			turn = 1 ;
-			turnsLeft -= 1 ; 
-			player.setText("turn :"+turn);
-			l2.setText("p2 :"+p2);
-			l3.setText("turns left : "+turnsLeft);
+		} else {
+			p2 += score;
+			turn = 1;
+			turnsLeft -= 1;
+			player.setText("turn :" + turn);
+			l2.setText("p2 :" + p2);
+			l3.setText("turns left : " + turnsLeft);
 			equation.setText("");
 			newRound();
-			if(turnsLeft == 0) {
+			if (turnsLeft == 0) {
 				dispose();
 				Score s = new Score(p1, p2);
 			}
-			
+
 		}
 	}
 

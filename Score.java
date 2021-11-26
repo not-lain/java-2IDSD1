@@ -3,6 +3,7 @@ package project;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -10,24 +11,39 @@ import javax.swing.JPanel;
 
 public class Score extends JFrame implements ActionListener{
 	JLabel msg ;
-	JButton menu ;
-	JPanel main ;
+	JButton menu,exit ;
+	JPanel main,container,buttonfield ;
 	public Score(int p1,int p2){
 		if (p1>p2) {
 			msg = new JLabel("player 1 has won");
-		}else {
+		}else if (p1<p2) {
 			msg = new JLabel("player 2 has won");
+		}
+		else {
+			msg = new JLabel("egalite");
 		}
 		
 		
-		menu = new JButton("menu");
-		menu.addActionListener(this);
+		
 		main = new JPanel();
+		main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
 		main.add(msg);
-		main.add(menu);
-		this.add(main);
+		
+		
+		buttonfield = new JPanel();
+		menu = new JButton("menu");
+		exit = new JButton("exit");
+		menu.addActionListener(this);
+		exit.addActionListener(this);
+		buttonfield.add(menu);
+		buttonfield.add(exit);
+		
+		main.add(buttonfield);
+		container = new JPanel();
+		container.add(main);
+		this.add(container);
 		this.setTitle("Congrats");
-		this.pack();
+		this.setSize(400,400);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -37,6 +53,9 @@ public class Score extends JFrame implements ActionListener{
 		if(e.getSource()==menu) {
 			dispose();
 			Frame f = new Frame();
+		}
+		if(e.getSource()==exit) {
+			System.exit(0);
 		}
 	}
 }
