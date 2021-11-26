@@ -16,14 +16,31 @@ import javax.swing.border.Border;
 import javax.swing.plaf.ListUI;
 
 public class Chiffres extends JFrame implements ActionListener {
-	JPanel main, submitzone, tryZone, user, container;
+	JPanel main, submitzone, tryZone, user, container,turnzone;
 	JButton submit, menu, exit, b1, b2, b3, b4, b5, b6, b7, plus, minus, divide, times;
-	JLabel msg, equation, number;
+	JLabel msg, equation, number, player,l1,l2,l3;
 	List<Integer> l = new ArrayList<Integer>();
 	List<Integer> input = new ArrayList<Integer>();
-	int a, b, eq, target,score;
+	int a, b, eq, target,score,p1 = 0,p2 = 0,turn = 1,turnsLeft=9;
 
 	Chiffres() {
+		turnzone = new JPanel();
+		turnzone.setLayout(new BoxLayout(turnzone, BoxLayout.Y_AXIS));
+		player = new JLabel("turn :"+turn);
+		l1 = new JLabel("p1 :"+p1);
+		l2 = new JLabel("p2 : "+p2);
+		l3 = new JLabel("turns left : "+turnsLeft);
+		turnzone.add(player);
+		turnzone.add(l1);
+		turnzone.add(l2);
+		turnzone.add(l3);
+		
+		
+		
+		
+		
+		
+		
 		tryZone = new JPanel(new GridLayout(7, 2));
 		tryZone.setPreferredSize(new Dimension(200, 300));
 		b1 = new JButton();
@@ -82,6 +99,7 @@ public class Chiffres extends JFrame implements ActionListener {
 
 		main = new JPanel();
 		main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
+		main.add(turnzone);
 		main.add(tryZone);
 		main.add(user);
 		main.add(submitzone);
@@ -305,6 +323,8 @@ public class Chiffres extends JFrame implements ActionListener {
 	}
 
 	private void CalculateScore() {
+		score = 0;
+		
 		if (input.get(input.size() - 1) >= 1000) {
 			input.remove(input.size() - 1);
 			System.out.println(input);
@@ -367,11 +387,30 @@ public class Chiffres extends JFrame implements ActionListener {
 			}
 
 		}
-		score = 100 - Math.abs(target - input.get(0));
+		score = (int) (100 - Math.abs(target - input.get(0)));
 		if (score < 0 ) {
 			score = 0 ; 
 		}
-		
+		if (turn == 1) {
+			p1+=score ; 
+			turn = 2 ;
+			player.setText("turn :"+turn);
+			l1.setText("p1 :"+p1);
+			newRound();
+		}else {
+			p2+=score;
+			turn = 1 ;
+			turnsLeft -= 1 ; 
+			player.setText("turn :"+turn);
+			l2.setText("p2 :"+p2);
+			l3.setText("turns left : "+turnsLeft);
+			newRound();
+			if(turnsLeft == 0) {
+				dispose();
+				Score s = new Score(p1, p2);
+			}
+			
+		}
 	}
 
 }
