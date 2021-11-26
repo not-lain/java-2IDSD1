@@ -1,6 +1,7 @@
 package project;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -308,9 +309,19 @@ public class Chiffres extends JFrame implements ActionListener {
 
 	private void newRound() {
 		l.clear();
+		input.clear();
+		input.add(0);
+		input.add(1000);
 		for (int i = 0; i < 7; i++) {
 			l.add(randomNumberGenerator());
 		}
+		for (Component component : tryZone.getComponents()) {
+			// if we have a JtextField
+			if (component instanceof JButton) {
+				// enable JButton for next turn
+				component.setEnabled(true);
+				}
+			}
 		b1.setText("" + l.get(0));
 		b2.setText("" + l.get(1));
 		b3.setText("" + l.get(2));
@@ -324,7 +335,8 @@ public class Chiffres extends JFrame implements ActionListener {
 
 	private void CalculateScore() {
 		score = 0;
-		
+		a = 0 ;
+		b = 0 ;
 		if (input.get(input.size() - 1) >= 1000) {
 			input.remove(input.size() - 1);
 			System.out.println(input);
@@ -396,6 +408,7 @@ public class Chiffres extends JFrame implements ActionListener {
 			turn = 2 ;
 			player.setText("turn :"+turn);
 			l1.setText("p1 :"+p1);
+			equation.setText("");
 			newRound();
 		}else {
 			p2+=score;
@@ -404,6 +417,7 @@ public class Chiffres extends JFrame implements ActionListener {
 			player.setText("turn :"+turn);
 			l2.setText("p2 :"+p2);
 			l3.setText("turns left : "+turnsLeft);
+			equation.setText("");
 			newRound();
 			if(turnsLeft == 0) {
 				dispose();
