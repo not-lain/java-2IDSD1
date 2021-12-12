@@ -21,6 +21,10 @@ created by : hafedh hichri
 
 ![image](https://user-images.githubusercontent.com/70411813/145730560-c8f50511-b994-40c3-88cb-80a64b6a91cb.png)
 
+selecting an equation
+
 ![image](https://user-images.githubusercontent.com/70411813/145730719-79911756-6274-4da1-932a-95dac4bb6bfb.png)
+
+after clicking submit 
 
 ![image](https://user-images.githubusercontent.com/70411813/145730731-25cb2d82-1316-4cc1-8739-b871025b1d17.png)
